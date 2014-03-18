@@ -2,7 +2,10 @@
 #include <Brain.h>
 
 // Set up the brain parser, pass it the hardware serial object you want to listen on.
-Brain brain(Serial);
+//Brain brain(Serial);
+// Leonardo boards use "Serial1"
+Brain brain(Serial1);
+
 int brain_status_color = RED;
 int loops_since_good_brain_read = 0;
 
