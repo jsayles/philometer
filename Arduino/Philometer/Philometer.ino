@@ -1,7 +1,7 @@
 #include "Constants.h"
 #include <Brain.h>
 
-// Set up the brain parser, pass it the hardware serial object you want to listen on.
+// Set up the brain parser, pass it the hardware serial object you wanGt to listen on.
 //Brain brain(Serial);
 // Leonardo boards use "Serial1"
 Brain brain(Serial1);
@@ -21,7 +21,8 @@ void setup() {
    mark_counter = 0;
    mark_delay = 0;
   
-   setLights(RED);
+   setLights(BLUE);
+   delay(1000);
 
    setupTimer();
   
@@ -78,23 +79,23 @@ void loop() {
       
       //Serial.println(brain.readErrors());
       Serial.print(timestamp);
-      Serial.print(", ");
+      Serial.print(",");
       Serial.print(mark_counter);
-      Serial.print(", ");
+      Serial.print(",");
       Serial.print(brain.readCSV());
-      Serial.print(", ");
+      Serial.print(",");
       Serial.print(getBaseHeartReading());
-      Serial.print(", ");
+      Serial.print(",");
       Serial.print(getHeartRate());
-      Serial.print(", ");
+      Serial.print(",");
       Serial.print(getGSR());
-      Serial.print(", ");
+      Serial.print(",");
       Serial.print(body_temp);
-      Serial.print(", ");
+      Serial.print(",");
       Serial.print(room_temp);
-      Serial.print(", ");
+      Serial.print(",");
       Serial.print(temp_diff);
-      Serial.print(", ");
+      Serial.print(",");
       Serial.print(soundSensorValue);
       Serial.println();
    } else {

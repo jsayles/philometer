@@ -19,3 +19,6 @@
 
 # Python 
 *.pyc
+
+data
+data/*

@@ -1,6 +1,6 @@
 #include <math.h>
 
-const float calibration = 3.6;
+const float calibration = 6.9;
 
 float last_temp_reading = 0;
 
