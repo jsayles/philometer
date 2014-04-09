@@ -8,7 +8,7 @@ int temp_cnt = 0;
 float totalTemp = 0;
 void readBodyTemp() {
    temp_cnt++;
-   int reading = analogRead(TEMP); 
+   int reading = analogRead(BODY_TEMP); 
    float temperatureF = calcTemp(reading);
    totalTemp += temperatureF;
 }

@@ -1,20 +1,27 @@
 // Sound Sensor
 #define SOUND_SENSOR A0
 
-// Room Temp
+// Temp Room
 #define ROOM_TEMP A1
 
+// Temp Body
+#define BODY_TEMP A2
+
+// Temp Adjust
+#define TEMP_ADJ A3
+
 // GSR  Sensor
-#define GSR A2
+#define GSR A4
 
-// Temp Sensor
-#define TEMP A3
+// Analog 2
+#define ANALOG2 A5
 
-// Restart Button
-#define RESTART_BUTTON 8
+// EEG = RX Pin 0
+// Serial TX = Pin 1
+// Heart Rate = Pin 2
 
 // Marker Button
-#define MARK_BUTTON 9
+#define MARK_BUTTON 3
 
 // DIGITAL DISPLAY
 #define DISPLAY_CLOCK 4
@@ -23,6 +30,15 @@
 // LED CHAIN
 #define LEDS_CLOCK 6
 #define LEDS_DATA 7
+
+// Reset Button
+#define RESTART_BUTTON 8
+
+// Internal LED
+// Pins 9, 10, 11
+
+// LED Bars
+// Pin 12, 13
 
 // LED Colors and Brightness
 #define RED 1

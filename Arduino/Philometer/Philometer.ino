@@ -64,7 +64,14 @@ void loop() {
    // we call the get methods.
    readGSR();
    readBodyTemp();
-
+   
+   int a1 = analogRead(TEMP_ADJ); 
+   int a2 = analogRead(ANALOG2); 
+   int r, g, b = 0; 
+   //analogWrite(9, 100);
+   //analogWrite(10, a2%255);
+   analogWrite(11, a2%255);
+   
    // We go off the base timing of the brain sensors which are ready every
    // aprox 1 second.  We then pull all our data and output the CSV
    if (brain.update()) {
@@ -97,6 +104,10 @@ void loop() {
       Serial.print(temp_diff);
       Serial.print(",");
       Serial.print(soundSensorValue);
+      Serial.print(",");
+      Serial.print(a1);
+      Serial.print(",");
+      Serial.print(a2);
       Serial.println();
    } else {
       if (++loops_since_good_brain_read > 100) {
