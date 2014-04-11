@@ -10,11 +10,11 @@
 // Temp Adjust
 #define TEMP_ADJ A3
 
-// GSR  Sensor
+// GSR Sensor
 #define GSR A4
 
-// Analog 2
-#define ANALOG2 A5
+// Brain Data Bypass
+#define BRAIN_BYPASS A5
 
 // EEG = RX Pin 0
 // Serial TX = Pin 1

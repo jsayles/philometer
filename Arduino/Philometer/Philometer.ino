@@ -8,6 +8,7 @@ Brain brain(Serial1);
 
 int brain_status_color = RED;
 int loops_since_good_brain_read = 0;
+int brain_bypass_counter = 0;
 
 int mark_counter = 0;
 int mark_delay = 0;
@@ -30,7 +31,7 @@ void setup() {
   
    pinMode(SOUND_SENSOR, INPUT); 
   
-   Serial.print("timestamp, mark, brain connection, attention, meditation, delta, theta, low alpha, high alpha, low beta, high beta, low gamma, high gamma, heart base, heart rate, GSR, body temp, room temp, temp diff, sound level");
+   Serial.print("timestamp, mark, brain signal, attention, meditation, delta, theta, low alpha, high alpha, low beta, high beta, low gamma, high gamma, heart base, heart rate, GSR, body temp, room temp, temp diff, sound level");
 }
 
 void loop() {
@@ -65,18 +66,25 @@ void loop() {
    readGSR();
    readBodyTemp();
    
-   int a1 = analogRead(TEMP_ADJ); 
-   int a2 = analogRead(ANALOG2); 
+   int temp_adjust = analogRead(TEMP_ADJ); 
+   int brain_data_bypass = analogRead(BRAIN_BYPASS); 
    int r, g, b = 0; 
+   
    //analogWrite(9, 100);
    //analogWrite(10, a2%255);
-   analogWrite(11, a2%255);
+   analogWrite(11, 255);
    
    // We go off the base timing of the brain sensors which are ready every
    // aprox 1 second.  We then pull all our data and output the CSV
-   if (brain.update()) {
-      brain_status_color = GREEN;
-      loops_since_good_brain_read = 0;
+   if (brain.update() | brain_bypass_counter >= brain_data_bypass) {
+      String brain_data = brain.readCSV();
+      if (brain_bypass_counter >= brain_data_bypass) {
+         brain_bypass_counter = 0;
+         brain_data = "0,0,0,0,0,0,0,0,0,0,0";
+      } else {
+         brain_status_color = GREEN;
+         loops_since_good_brain_read = 0;
+      }
       
       String timestamp = getStringTS();
       float body_temp = getBodyTemp();
@@ -89,7 +97,7 @@ void loop() {
       Serial.print(",");
       Serial.print(mark_counter);
       Serial.print(",");
-      Serial.print(brain.readCSV());
+      Serial.print(brain_data);
       Serial.print(",");
       Serial.print(getBaseHeartReading());
       Serial.print(",");
@@ -105,11 +113,12 @@ void loop() {
       Serial.print(",");
       Serial.print(soundSensorValue);
       Serial.print(",");
-      Serial.print(a1);
+      Serial.print(temp_adjust);
       Serial.print(",");
-      Serial.print(a2);
+      Serial.print(brain_data_bypass);
       Serial.println();
    } else {
+      brain_bypass_counter++;
       if (++loops_since_good_brain_read > 100) {
          brain_status_color = RED;
       }
