@@ -31,11 +31,11 @@ void setup() {
 
   // Set up serial connection
   println("Find your Arduino in the list below, note its [index]:\n");
-  
+
   for (int i = 0; i < Serial.list().length; i++) {
     println("[" + i + "] " + Serial.list()[i]);
   }
-  
+
   // Put the index found above here:
   serial = new Serial(this, Serial.list()[2], 9600);    
   serial.bufferUntil(10);
@@ -115,11 +115,11 @@ void draw() {
 void serialEvent(Serial p) {
   // Split incoming packet on commas
   // See https://github.com/kitschpatrol/Arduino-Brain-Library/blob/master/README for information on the CSV packet format
-  
+
   String incomingString = p.readString().trim();
   print("Received string over serial: ");
   println(incomingString);  
-  
+
   String[] incomingValues = split(incomingString, ',');
 
   // Verify that the packet looks legit
@@ -128,11 +128,11 @@ void serialEvent(Serial p) {
 
     // Wait till the third packet or so to start recording to avoid initialization garbage.
     if (packetCount > 3) {
-      
+
       for (int i = 0; i < incomingValues.length; i++) {
         String stringValue = incomingValues[i].trim();
 
-      int newValue = Integer.parseInt(stringValue);
+        int newValue = Integer.parseInt(stringValue);
 
         // Zero the EEG power values if we don't have a signal.
         // Can be useful to leave them in for development.
@@ -143,7 +143,7 @@ void serialEvent(Serial p) {
         channels[i].addDataPoint(newValue);
       }
     }
-  } 
+  }
 }
 
 
@@ -160,3 +160,4 @@ long constrainLong(long value, long min_value, long max_value) {
   if (value < min_value) return min_value;
   return value;
 }
+
