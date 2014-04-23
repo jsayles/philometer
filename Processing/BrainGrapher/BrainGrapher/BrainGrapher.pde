@@ -18,6 +18,10 @@ Monitor[] monitors = new Monitor[10];
 Graph graph;
 ConnectionLight connectionLight;
 
+// Data directory (hardcoded to my home dir for now)
+String data_directory = "/Users/jacob/Code/philometer/data/";
+PrintWriter data_output;
+
 int packetCount = 0;
 int globalMax = 0;
 String scaleMode;
@@ -32,12 +36,20 @@ void setup() {
   // Set up serial connection
   println("Find your Arduino in the list below, note its [index]:\n");
 
+/*
   for (int i = 0; i < Serial.list().length; i++) {
     println("[" + i + "] " + Serial.list()[i]);
+    String serial_string = Serial.list()[i];
+    if (serial_string.matches("/dev/tty.usb*")) {
+      print("Using Serial: " + Serial.list()[i]);
+      serial = new Serial(this, Serial.list()[5], 9600);    
+      serial.bufferUntil(10);
+    }
   }
+*/
 
   // Put the index found above here:
-  serial = new Serial(this, Serial.list()[2], 9600);    
+  serial = new Serial(this, Serial.list()[5], 9600);    
   serial.bufferUntil(10);
 
   // Set up the ControlP5 knobs and dials
@@ -84,6 +96,11 @@ void setup() {
 
   // Set yup the connection light
   connectionLight = new ConnectionLight(width - 140, 10, 20);
+  
+  // Setup our output data file
+  String data_file = data_directory + isoDateTime() + ".txt";
+  println("Writing raw data to: " + data_file);
+  data_output = createWriter(data_file);
 }
 
 void draw() {
@@ -113,36 +130,45 @@ void draw() {
 }
 
 void serialEvent(Serial p) {
-  // Split incoming packet on commas
-  // See https://github.com/kitschpatrol/Arduino-Brain-Library/blob/master/README for information on the CSV packet format
-
-  String incomingString = p.readString().trim();
-  print("Received string over serial: ");
-  println(incomingString);  
-
-  String[] incomingValues = split(incomingString, ',');
-
-  // Verify that the packet looks legit
-  if (incomingValues.length > 1) {
-    packetCount++;
-
-    // Wait till the third packet or so to start recording to avoid initialization garbage.
-    if (packetCount > 3) {
-
-      for (int i = 0; i < incomingValues.length; i++) {
-        String stringValue = incomingValues[i].trim();
-
-        int newValue = Integer.parseInt(stringValue);
-
-        // Zero the EEG power values if we don't have a signal.
-        // Can be useful to leave them in for development.
-        if ((Integer.parseInt(incomingValues[0]) == 200) && (i > 2)) {
-          newValue = 0;
+  try {
+    // Split incoming packet on commas
+    // See https://github.com/kitschpatrol/Arduino-Brain-Library/blob/master/README for information on the CSV packet format
+  
+    String incomingString = p.readString().trim();
+    //print("Received string over serial: "); 
+    //println(incomingString);  
+  
+    // Dump our string to the data file
+    data_output.println(incomingString);
+    data_output.flush();
+    
+    String[] incomingValues = split(incomingString, ',');
+  
+    // Verify that the packet looks legit
+    if (incomingValues.length > 1) {
+      packetCount++;
+  
+      // Wait till the third packet or so to start recording to avoid initialization garbage.
+      if (packetCount > 3) {
+  
+        //for (int i = 0; i < incomingValues.length; i++) {
+        for (int i = 2; i < 13; i++) {
+          String stringValue = incomingValues[i].trim();
+  
+          int newValue = Integer.parseInt(stringValue);
+  
+          // Zero the EEG power values if we don't have a signal.
+          // Can be useful to leave them in for development.
+          if ((Integer.parseInt(incomingValues[2]) == 200) && (i > 2)) {
+            newValue = 0;
+          }
+  
+          channels[i - 2].addDataPoint(newValue);
         }
-
-        channels[i].addDataPoint(newValue);
       }
     }
+  } catch(Exception e) {
+    e.printStackTrace();
   }
 }
 
@@ -159,5 +185,26 @@ long constrainLong(long value, long min_value, long max_value) {
   if (value > max_value) return max_value;
   if (value < min_value) return min_value;
   return value;
+}
+
+String isoDateTime() {
+  String dt = year() + "-";
+  if (month() <= 9) dt += "0";
+  dt += month() + "-";
+  if (day() <= 9) dt += "0";
+  dt += day() + "-T";
+  if (hour() <= 9) dt += "0";
+  dt += hour() + ":";
+  if (minute() <= 9) dt += "0";
+  dt += minute() + ":";
+  if (second() <= 9) dt += "0";
+  dt += second();
+  return dt;
+}
+
+void stop() {
+  // Shut down our data output file
+  data_output.flush();
+  data_output.close();
 }
 
