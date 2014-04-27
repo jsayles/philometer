@@ -1,31 +1,38 @@
 // Sound Sensor
-#define SOUND_SENSOR A0
+//#define SOUND_SENSOR A0
 
 // Temp Room
-#define ROOM_TEMP A1
+#define ROOM_TEMP A0
+
+// GSR Sensor
+#define GSR A1
 
 // Temp Body
 #define BODY_TEMP A2
 
-// Temp Adjust
-#define TEMP_ADJ A3
-
-// GSR Sensor
-#define GSR A4
-
 // Brain Data Bypass
-#define BRAIN_BYPASS A5
+#define BRAIN_BYPASS A3
+
+// Temp Adjust
+//#define TEMP_ADJ A3
+
+// LCD = IIC = A4, A5
 
 // EEG = RX Pin 0
 // Serial TX = Pin 1
-// Heart Rate = Pin 2
+
+// Heart Rate = Pin 2 (leonardo)
+// Pin 3 (Uno/Duemilanove)
+// Interupt 1
 
 // Marker Button
-#define MARK_BUTTON 3
+#define MARK_BUTTON 2
 
 // DIGITAL DISPLAY
-#define DISPLAY_CLOCK 4
-#define DISPLAY_DATA 5
+//#define DISPLAY_CLOCK 4
+//#define DISPLAY_DATA 5
+#define DISPLAY_CLOCK 12
+#define DISPLAY_DATA 13
 
 // LED CHAIN
 #define LEDS_CLOCK 6
@@ -47,4 +54,4 @@
 #define YELLOW 4
 #define WHITE 5
 #define BLACK 6
-#define BRIGHTNESS 100 // 10 to 255
+#define BRIGHTNESS 50 // 10 to 255

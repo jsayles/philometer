@@ -13,8 +13,8 @@ ControlP5 controlP5;
 
 Serial serial;
 
-Channel[] channels = new Channel[11];
-Monitor[] monitors = new Monitor[10];
+Channel[] channels = new Channel[12];
+Monitor[] monitors = new Monitor[11];
 Graph graph;
 ConnectionLight connectionLight;
 
@@ -72,6 +72,7 @@ void setup() {
   channels[8] = new Channel("High Beta", color(116, 23, 190), "Alert");
   channels[9] = new Channel("Low Gamma", color(39, 25, 159), "Multi-sensory processing");
   channels[10] = new Channel("High Gamma", color(23, 26, 153), "???");
+  channels[11] = new Channel("Heart Freq", color(23, 26, 153), "???");
 
   // Manual override for a couple of limits.
   channels[0].minValue = 0;
@@ -86,7 +87,7 @@ void setup() {
 
   // Set up the monitors, skip the signal quality
   for (int i = 0; i < monitors.length; i++) {
-    monitors[i] = new Monitor(channels[i + 1], i * (width / 10), height / 2, width / 10, height / 2);
+    monitors[i] = new Monitor(channels[i + 1], i * (width / monitors.length), height / 2, width / monitors.length, height / 2);
   }
 
   monitors[monitors.length - 1].w += width % monitors.length;
@@ -152,7 +153,7 @@ void serialEvent(Serial p) {
       if (packetCount > 3) {
   
         //for (int i = 0; i < incomingValues.length; i++) {
-        for (int i = 2; i < 13; i++) {
+        for (int i = 2; i < 14; i++) {
           String stringValue = incomingValues[i].trim();
   
           int newValue = Integer.parseInt(stringValue);

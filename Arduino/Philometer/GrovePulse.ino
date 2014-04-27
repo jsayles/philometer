@@ -28,10 +28,12 @@ void setupHeartMonitor() {
 
 int getHeartRate() {
    return heart_rate;
+   //return 60000 / getHeartFreq();
 }
 
-int getBaseHeartReading() {
+int getHeartFreq() {
    return last_base_reading;
+   //return analogRead(TEMP_ADJ) + round(last_gsr_reading);
 }
 
 int getPulseStatusColor() {

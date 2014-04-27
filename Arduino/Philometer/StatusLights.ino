@@ -3,15 +3,27 @@
 RGBdriver LED_Driver(LEDS_CLOCK, LEDS_DATA);
 
 void setLights(int c) {
-   setLights(c, c, c, c);
+   setLights(c, c, c, c, c, c);
 }
 
-void setLights(int c1, int c2, int c3, int c4) {
+void updateLights() {
+   // Keep the status lights up to date
+   setLights(heart_beat_color,
+             getPulseStatusColor(),
+             getGSRStatusColor(),
+             getTempStatusColor(),
+             brain_status_color,
+             system_light_color);
+}       
+
+void setLights(int c1, int c2, int c3, int c4, int c5, int c6) {
    LED_Driver.begin();
    setLight(c1);
    setLight(c2);
    setLight(c3);
    setLight(c4);
+   setLight(c5);
+   setLight(c6);
    LED_Driver.end();
 }
 
