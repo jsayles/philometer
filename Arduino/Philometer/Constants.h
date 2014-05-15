@@ -1,17 +1,17 @@
 // Sound Sensor
 //#define SOUND_SENSOR A0
 
-// Temp Room
-#define ROOM_TEMP A0
+// Temp Body
+#define BODY_TEMP A0
 
 // GSR Sensor
 #define GSR A1
 
-// Temp Body
-#define BODY_TEMP A2
-
 // Brain Data Bypass
-#define BRAIN_BYPASS A3
+#define BRAIN_BYPASS A2
+
+// Temp Room
+#define ROOM_TEMP A3
 
 // Temp Adjust
 //#define TEMP_ADJ A3
@@ -39,7 +39,7 @@
 #define LEDS_DATA 7
 
 // Reset Button
-#define RESTART_BUTTON 8
+#define DISPLAY_BUTTON 8
 
 // Internal LED
 // Pins 9, 10, 11
@@ -54,4 +54,4 @@
 #define YELLOW 4
 #define WHITE 5
 #define BLACK 6
-#define BRIGHTNESS 50 // 10 to 255
+#define BRIGHTNESS 100 // 10 to 255

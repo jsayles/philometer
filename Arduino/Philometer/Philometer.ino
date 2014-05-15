@@ -25,7 +25,7 @@ int heart_beat_color = BLUE;
 void setup() {
    Serial.begin(9600);
 
-   pinMode(RESTART_BUTTON, INPUT); 
+   pinMode(DISPLAY_BUTTON, INPUT); 
    pinMode(MARK_BUTTON, INPUT); 
   
    mark_counter = 0;
@@ -50,12 +50,10 @@ void setup() {
 void loop() {
    time = millis();
 
-   // Reset Button
+   // Clear Display
    /*
-   if (digitalRead(RESTART_BUTTON) == HIGH) {
-      Serial.println("Restarting...");
-      delay(2000);
-      setup();
+   if (digitalRead(DISPLAY_BUTTON) == HIGH) {
+     clearDisplay();
    }
    */
   
@@ -70,7 +68,8 @@ void loop() {
    }
   
    // Update the heart beat light
-   int bpm = getHeartRate();
+   int bpm = getHeartBPM();
+   int heart_interval = getHeartFreq();
    if (bpm > 0) {
       tracking_hr = true;
       //int ms_per_beat = bpm/60 * 1000;
@@ -135,6 +134,8 @@ void loop() {
       float temp_diff = body_temp - room_temp;
       //int soundSensorValue = analogRead(SOUND_SENSOR);
       
+      float gsr = getGSR();
+      
       //Serial.println(brain.readErrors());
       Serial.print(timestamp);
       Serial.print(",");
@@ -142,11 +143,11 @@ void loop() {
       Serial.print(",");
       Serial.print(brain_data);
       Serial.print(",");
-      Serial.print(getHeartFreq());
+      Serial.print(heart_interval);
       Serial.print(",");
-      Serial.print(getHeartRate());
+      Serial.print(bpm);
       Serial.print(",");
-      Serial.print(getGSR());
+      Serial.print(gsr);
       Serial.print(",");
       Serial.print(body_temp);
       Serial.print(",");
@@ -160,6 +161,11 @@ void loop() {
       //Serial.print(",");
       Serial.print(brain_data_bypass);
       Serial.println();
+ 
+      int brain_signal = 100;
+      int brain_attention = 50;
+      int brain_meditation = 50;
+      displayStats(gsr, body_temp, brain_signal, brain_attention, brain_meditation, heart_interval, bpm, mark_counter);      
    } else {
       brain_bypass_counter++;
       if (++loops_since_good_brain_read > 100) {
