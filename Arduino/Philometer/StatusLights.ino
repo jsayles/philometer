@@ -1,9 +1,21 @@
 #include "RGBdriver.h"
+#include <Adafruit_NeoPixel.h>
 
 RGBdriver LED_Driver(LEDS_CLOCK, LEDS_DATA);
 
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(6, CASE_LIGHTS, NEO_RGB + NEO_KHZ800);
+
+uint32_t case_color = strip.Color(255, 0, 0);
+
 void setLights(int c) {
-   setLights(c, c, c, c, c, c);
+  // Turn on the case lights
+  strip.begin();
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+      strip.setPixelColor(i, case_color);
+  }
+  strip.show();
+
+  setLights(c, c, c, c, c, c);
 }
 
 void updateLights() {
@@ -48,3 +60,5 @@ void setLight(int color) {
          LED_Driver.SetColor(0, 0, 0);
    }
 }
+
+

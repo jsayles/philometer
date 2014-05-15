@@ -39,7 +39,9 @@
 #define LEDS_DATA 7
 
 // Reset Button
-#define DISPLAY_BUTTON 8
+#define DISPLAY_BUTTON 9
+
+#define CASE_LIGHTS 10
 
 // Internal LED
 // Pins 9, 10, 11

@@ -7,6 +7,10 @@ void setupOLED() {
   DDRB|=0x21;        
   PORTB |= 0x21;
   
+  splash();
+}
+
+void splash() {
   SeeedOled.clearDisplay();          //clear the screen and set start position to top left corner
   SeeedOled.setNormalDisplay();      //Set display to normal mode (i.e non-inverse mode)
   SeeedOled.setPageMode();           //Set addressing mode to Page Mode
@@ -19,8 +23,7 @@ void setupOLED() {
   SeeedOled.setTextXY(5, 1);  
   SeeedOled.putString("Jacob & Katie");
   SeeedOled.setTextXY(7, 6);  
-  SeeedOled.putString("2014");
-  
+  SeeedOled.putString("2014"); 
   delay(2000);
   SeeedOled.clearDisplay();
 }
@@ -29,7 +32,7 @@ void clearDisplay() {
   SeeedOled.clearDisplay();
 }
 
-void displayStats(float gsr, float body_temp, int brain_signal, int brain_attention, int brain_meditation, int heart_interval, int heart_bpm, int mark) {
+void displayStats(float gsr, float body_temp, int brain_signal, int brain_attention, int brain_meditation, int brain_bypass, int heart_interval, int heart_bpm, int mark) {
   SeeedOled.setTextXY(0, 1);          
   SeeedOled.putString("GSR: "); 
   SeeedOled.putFloat(gsr); 
@@ -40,11 +43,14 @@ void displayStats(float gsr, float body_temp, int brain_signal, int brain_attent
   SeeedOled.putString("Brain: "); 
   SeeedOled.putNumber(brain_signal); 
   SeeedOled.setTextXY(3, 2);          
-  SeeedOled.putString("Attn: "); 
+  SeeedOled.putString("A: "); 
   SeeedOled.putNumber(brain_attention); 
-  SeeedOled.setTextXY(4, 2);          
-  SeeedOled.putString("Med: "); 
+  SeeedOled.putString(" M: "); 
   SeeedOled.putNumber(brain_meditation); 
+  SeeedOled.setTextXY(4, 2);          
+  SeeedOled.putString("Bypass: "); 
+  SeeedOled.putNumber(brain_bypass); 
+  SeeedOled.putString("  "); 
   SeeedOled.setTextXY(5, 1);          
   SeeedOled.putString("Heart: "); 
   SeeedOled.putNumber(heart_interval); 

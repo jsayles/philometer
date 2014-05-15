@@ -1,7 +1,6 @@
 #include "Constants.h"
 #include <Brain.h>
 
-
 // Set up the brain parser, pass it the hardware serial object you wanGt to listen on.
 //Brain brain(Serial);
 // Leonardo boards use "Serial1"
@@ -51,11 +50,9 @@ void loop() {
    time = millis();
 
    // Clear Display
-   /*
    if (digitalRead(DISPLAY_BUTTON) == HIGH) {
-     clearDisplay();
+     splash();
    }
-   */
   
    // Mark Increment Button
    if (mark_delay == 0) {
@@ -165,7 +162,7 @@ void loop() {
       int brain_signal = 100;
       int brain_attention = 50;
       int brain_meditation = 50;
-      displayStats(gsr, body_temp, brain_signal, brain_attention, brain_meditation, heart_interval, bpm, mark_counter);      
+      displayStats(gsr, body_temp, brain_signal, brain_attention, brain_meditation, brain_data_bypass, heart_interval, bpm, mark_counter);      
    } else {
       brain_bypass_counter++;
       if (++loops_since_good_brain_read > 100) {
