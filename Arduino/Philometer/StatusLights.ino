@@ -5,28 +5,66 @@ RGBdriver LED_Driver(LEDS_CLOCK, LEDS_DATA);
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(6, CASE_LIGHTS, NEO_RGB + NEO_KHZ800);
 
-uint32_t case_color = strip.Color(255, 0, 0);
+int BRIGHTNESS = 100;
 
-void setLights(int c) {
+void setCaseLights(int r, int g, int b) {
   // Turn on the case lights
   strip.begin();
   for(uint16_t i=0; i<strip.numPixels(); i++) {
-      strip.setPixelColor(i, case_color);
+      strip.setPixelColor(i, strip.Color(r, g, b));
   }
   strip.show();
+}
 
-  setLights(c, c, c, c, c, c);
+void setStatusBrightness(int b) {
+  BRIGHTNESS = b;
 }
 
 void updateLights() {
    // Keep the status lights up to date
-   setLights(heart_beat_color,
-             getPulseStatusColor(),
+   setLights(system_light_color,
+             brain_status_color,
              getGSRStatusColor(),
              getTempStatusColor(),
-             brain_status_color,
-             system_light_color);
+             getPulseStatusColor(),
+             heart_beat_color);
 }       
+
+void setLights(int c) {
+  setLights(c, c, c, c, c, c);
+}
+
+void testLights(int delayMS) {
+  // Test the case lights
+  setLights(BLACK);
+  setCaseLights(255, 0, 0);
+  delay(delayMS * 2);  
+  setCaseLights(0, 255, 0);
+  delay(delayMS * 2);
+  setCaseLights(0, 0, 255);
+  delay(delayMS * 2);
+
+  // Test the status lights
+  setLights(RED);
+  delay(delayMS * 2);
+  setLights(GREEN);
+  delay(delayMS * 2);
+  setLights(BLUE);
+  delay(delayMS);
+  setLights(GREEN, BLUE, BLUE, BLUE, BLUE, BLUE);
+  delay(delayMS);
+  setLights(BLUE, GREEN, BLUE, BLUE, BLUE, BLUE);
+  delay(delayMS);
+  setLights(BLUE, BLUE, GREEN, BLUE, BLUE, BLUE);
+  delay(delayMS);
+  setLights(BLUE, BLUE, BLUE, GREEN, BLUE, BLUE);
+  delay(delayMS);
+  setLights(BLUE, BLUE, BLUE, BLUE, GREEN, BLUE);
+  delay(delayMS);
+  setLights(BLUE, BLUE, BLUE, BLUE, BLUE, GREEN);
+  delay(delayMS);
+  setLights(BLUE);
+}
 
 void setLights(int c1, int c2, int c3, int c4, int c5, int c6) {
    LED_Driver.begin();
