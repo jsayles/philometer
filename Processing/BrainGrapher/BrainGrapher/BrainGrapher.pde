@@ -13,8 +13,8 @@ ControlP5 controlP5;
 
 Serial serial;
 
-Channel[] channels = new Channel[12];
-Monitor[] monitors = new Monitor[11];
+Channel[] channels = new Channel[15];
+Monitor[] monitors = new Monitor[14];
 Graph graph;
 ConnectionLight connectionLight;
 
@@ -64,15 +64,18 @@ void setup() {
   channels[0] = new Channel("Signal Quality", color(0), "");
   channels[1] = new Channel("Attention", color(100), "");
   channels[2] = new Channel("Meditation", color(50), "");
-  channels[3] = new Channel("Delta", color(219, 211, 42), "Dreamless Sleep");
-  channels[4] = new Channel("Theta", color(245, 80, 71), "Drowsy");
-  channels[5] = new Channel("Low Alpha", color(237, 0, 119), "Relaxed");
-  channels[6] = new Channel("High Alpha", color(212, 0, 149), "Relaxed");
-  channels[7] = new Channel("Low Beta", color(158, 18, 188), "Alert");
-  channels[8] = new Channel("High Beta", color(116, 23, 190), "Alert");
-  channels[9] = new Channel("Low Gamma", color(39, 25, 159), "Multi-sensory processing");
-  channels[10] = new Channel("High Gamma", color(23, 26, 153), "???");
-  channels[11] = new Channel("Heart Freq", color(23, 26, 153), "???");
+  channels[3] = new Channel("Delta", color(166,206,227), "Dreamless Sleep");
+  channels[4] = new Channel("Theta", color(31,120,180), "Drowsy");
+  channels[5] = new Channel("Low Alpha", color(51,160,44), "Relaxed");
+  channels[6] = new Channel("High Alpha", color(251,154,153), "Relaxed");
+  channels[7] = new Channel("Low Beta", color(227,26,28), "Alert");
+  channels[8] = new Channel("High Beta", color(253,191,111), "Alert");
+  channels[9] = new Channel("Low Gamma", color(255,127,0), "Multi-sensory processing");
+  channels[10] = new Channel("High Gamma", color(202,178,214), "???");
+  channels[11] = new Channel("Heart MS", color(106,61,154), "Heart MS");
+  channels[12] = new Channel("Heart BPM", color(255,255,153), "Beats Per Minute");
+  channels[13] = new Channel("GSR", color(178,223,138), "Galvanic Skin Response");
+  channels[14] = new Channel("Temp", color(177,89,40), "Body Temperature");
 
   // Manual override for a couple of limits.
   channels[0].minValue = 0;
@@ -152,17 +155,17 @@ void serialEvent(Serial p) {
       // Wait till the third packet or so to start recording to avoid initialization garbage.
       if (packetCount > 3) {
   
-        //for (int i = 0; i < incomingValues.length; i++) {
-        for (int i = 2; i < 14; i++) {
+        for (int i = 2; i < incomingValues.length; i++) {
+        //for (int i = 2; i < 14; i++) {
           String stringValue = incomingValues[i].trim();
   
           int newValue = Integer.parseInt(stringValue);
   
           // Zero the EEG power values if we don't have a signal.
           // Can be useful to leave them in for development.
-          if ((Integer.parseInt(incomingValues[2]) == 200) && (i > 2)) {
-            newValue = 0;
-          }
+          //if ((Integer.parseInt(incomingValues[2]) == 200) && (i > 2)) {
+          //  newValue = 0;
+          //}
   
           channels[i - 2].addDataPoint(newValue);
         }
@@ -209,3 +212,11 @@ void stop() {
   data_output.close();
 }
 
+int convertValue(String str) {
+  if (str.contains(".")) {
+    float f = Float.valueOf(str).floatValue();
+    return round(f);
+  } else {
+    return Integer.parseInt(str);
+  }
+}
