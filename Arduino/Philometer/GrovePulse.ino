@@ -13,7 +13,7 @@ unsigned long temp[21];
 unsigned long sub;
 bool data_effect=true;
 
-unsigned int heart_rate = 0;
+unsigned int heart_bpm = 0;
 
 unsigned int last_base_reading = 0;
 
@@ -26,8 +26,8 @@ void setupHeartMonitor() {
    attachInterrupt(1, interrupt, RISING); 
 }
 
-int getHeartRate() {
-   return heart_rate;
+int getHeartBPM() {
+   return heart_bpm;
    //return 60000 / getHeartFreq();
 }
 
@@ -46,9 +46,9 @@ int getPulseStatusColor() {
 /*Function: calculate the heart rate*/
 void sum() {
    if(data_effect) {
-      heart_rate=1200000/(temp[20]-temp[0]); //60*20*1000/20_total_time 
+      heart_bpm=1200000/(temp[20]-temp[0]); //60*20*1000/20_total_time 
       //Serial.print("Heart_rate_is:\t");
-      //Serial.println(heart_rate);
+      //Serial.println(heart_bpm);
    }
    data_effect=1; //sign bit
 }
@@ -75,7 +75,7 @@ void interrupt() {
       data_effect=0; //sign bit
       counter=0;
       //Serial.println("Heart rate measure error,test will restart!" );
-      heart_rate = 0;
+      heart_bpm = 0;
       arrayInit();
    }
 

@@ -1,20 +1,14 @@
-// Sound Sensor
-//#define SOUND_SENSOR A0
-
-// Temp Room
-#define ROOM_TEMP A0
+// Temp Body
+#define BODY_TEMP A0
 
 // GSR Sensor
 #define GSR A1
 
-// Temp Body
-#define BODY_TEMP A2
-
 // Brain Data Bypass
-#define BRAIN_BYPASS A3
+#define BRAIN_BYPASS A2
 
-// Temp Adjust
-//#define TEMP_ADJ A3
+// Brightness Controll
+#define BRIGHTNESS_CONTROLL A3
 
 // LCD = IIC = A4, A5
 
@@ -28,24 +22,19 @@
 // Marker Button
 #define MARK_BUTTON 2
 
-// DIGITAL DISPLAY
-//#define DISPLAY_CLOCK 4
-//#define DISPLAY_DATA 5
-#define DISPLAY_CLOCK 12
-#define DISPLAY_DATA 13
+// Display Button
+#define DISPLAY_BUTTON 5
 
 // LED CHAIN
 #define LEDS_CLOCK 6
 #define LEDS_DATA 7
 
-// Reset Button
-#define RESTART_BUTTON 8
+// Case Lights
+#define CASE_LIGHTS 10
 
-// Internal LED
-// Pins 9, 10, 11
-
-// LED Bars
-// Pin 12, 13
+// DIGITAL DISPLAY
+#define DISPLAY_CLOCK 12
+#define DISPLAY_DATA 13
 
 // LED Colors and Brightness
 #define RED 1
@@ -54,4 +43,3 @@
 #define YELLOW 4
 #define WHITE 5
 #define BLACK 6
-#define BRIGHTNESS 50 // 10 to 255

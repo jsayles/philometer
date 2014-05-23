@@ -12,6 +12,7 @@ void setupTemp() {
 //    dht.begin();
 }
 
+/*
 float room_humidity = 0;
 float room_temp = 0;
 void readRoomTemp()  {
@@ -24,6 +25,7 @@ void readRoomTemp()  {
    room_temp = (temperature * 9.0 / 5.0) + 32.0;;
 
 }
+*/
 
 const float calibration = 6.9;
 
@@ -47,7 +49,7 @@ float getBodyTemp() {
 }
 
 int getTempStatusColor() {
-   if (last_temp_reading > 0 && last_temp_reading < 100) {
+   if (last_temp_reading > 40 && last_temp_reading < 120) {
       return GREEN;
    }
    return RED;
@@ -75,7 +77,9 @@ float getHumidity() {
 }
 */
 
+/*
 float getRoomTemp() {
   return room_temp;
 }
+*/
 
