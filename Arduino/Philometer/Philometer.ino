@@ -41,7 +41,8 @@ void setup() {
    setupHeartMonitor();  
   
    // Display the header
-   Serial.print("timestamp, mark, brain signal, attention, meditation, delta, theta, low alpha, high alpha, low beta, high beta, low gamma, high gamma, heart MS, heart BPM, GSR, body temp, brain bypass");
+   Serial.println();
+   Serial.println("timestamp, mark, brain signal, attention, meditation, delta, theta, low alpha, high alpha, low beta, high beta, low gamma, high gamma, heart MS, heart BPM, GSR, body temp, brain bypass");
 }
 
 void loop() {
@@ -65,9 +66,9 @@ void loop() {
    }
   
    // Update the heart beat light
-   int bpm = getHeartBPM();
-   int heart_interval = getHeartFreq();
-   if (bpm > 0) {
+   int heart_bpm = getHeartBPM();
+   int heart_ms = getHeartFreq();
+   if (heart_bpm > 0) {
       tracking_hr = true;
       //int ms_per_beat = bpm/60 * 1000;
       int ms_per_beat = getHeartFreq();
@@ -104,57 +105,42 @@ void loop() {
    
    // We go off the base timing of the brain sensors which are ready every
    // aprox 1 second.  We then pull all our data and output the CSV
+   int brain_signal = brain.readSignalQuality();
+   int brain_attention = brain.readAttention();
+   int brain_meditation = brain.readMeditation();
    int brain_data_bypass = analogRead(BRAIN_BYPASS) + 50; 
    if (brain.update() | brain_bypass_counter >= brain_data_bypass) {
       String brain_data = brain.readCSV();
       if (brain_bypass_counter >= brain_data_bypass) {
          // Fake the data
          brain_data = "250,0,0,0,0,0,0,0,0,0,0";
+         brain_signal = 250;
+         brain_attention = 0;
+         brain_meditation = 0;
       } else {
          // We got data!
-         brain_status_color = GREEN;
          loops_since_good_brain_read = 0;
       }
       brain_bypass_counter = 0;
       
+      // Calculate the brain signal light
+      if (brain_signal == 0) {
+        brain_status_color = GREEN;
+      } else if (brain_signal < 200) {
+        brain_status_color = YELLOW;
+      } else {
+        brain_status_color = RED;
+      }
+
       String timestamp = getStringTS();
       float body_temp = getBodyTemp();
-      //float room_temp = getRoomTemp();
-      //float temp_diff = body_temp - room_temp;
-      //int soundSensorValue = analogRead(SOUND_SENSOR);
-      
       float gsr = getGSR();
       
-      //Serial.println(brain.readErrors());
-      Serial.print(timestamp);
-      Serial.print(",");
-      Serial.print(mark_counter);
-      Serial.print(",");
-      Serial.print(brain_data);
-      Serial.print(",");
-      Serial.print(heart_interval);
-      Serial.print(",");
-      Serial.print(bpm);
-      Serial.print(",");
-      Serial.print(gsr);
-      Serial.print(",");
-      Serial.print(body_temp);
-      Serial.print(",");
-      //Serial.print(room_temp);
-      //Serial.print(",");
-      //Serial.print(temp_diff);
-      //Serial.print(",");
-      //Serial.print(soundSensorValue);
-      //Serial.print(",");
-      //Serial.print(temp_adjust);
-      //Serial.print(",");
-      Serial.print(brain_data_bypass);
-      Serial.println();
- 
-      int brain_signal = brain.readSignalQuality();
-      int brain_attention = brain.readAttention();
-      int brain_meditation = brain.readMeditation();
-      displayStats(gsr, body_temp, brain_signal, brain_attention, brain_meditation, brain_data_bypass, heart_interval, bpm, mark_counter);      
+      // Dump the data out the serial connection
+      serialOut(timestamp, mark_counter, brain_data, brain_data_bypass, heart_ms, heart_bpm, gsr, body_temp);
+      
+      // Display the data on the pretty little OLED
+      displayStats(gsr, body_temp, brain_signal, brain_attention, brain_meditation, brain_data_bypass, heart_ms, heart_bpm, mark_counter);      
    } else {
       brain_bypass_counter++;
       if (++loops_since_good_brain_read > 100) {
@@ -162,3 +148,22 @@ void loop() {
       }
    }
 }
+
+void serialOut(String timestamp, int mark_counter, String brain_data, int brain_data_bypass, int heart_ms, int heart_bpm, float gsr, float body_temp) {
+      Serial.print(timestamp);
+      Serial.print(",");
+      Serial.print(mark_counter);
+      Serial.print(",");
+      Serial.print(brain_data);
+      Serial.print(",");
+      Serial.print(heart_ms);
+      Serial.print(",");
+      Serial.print(heart_bpm);
+      Serial.print(",");
+      Serial.print(gsr);
+      Serial.print(",");
+      Serial.print(body_temp);
+      Serial.print(",");
+      Serial.print(brain_data_bypass);
+      Serial.println();
+ }

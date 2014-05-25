@@ -6,6 +6,7 @@ class Monitor {
   Channel sourceChannel;
   CheckBox showGraph;   
   Textlabel label;
+  Textlabel valueLabel;
   Toggle toggle;
 
   Monitor(Channel _sourceChannel, int _x, int _y, int _w, int _h) {
@@ -30,10 +31,14 @@ class Monitor {
 
     label = new Textlabel(controlP5, sourceChannel.name.toUpperCase(), x + 12, y + 15);
     label.setColorValue(0);
+    
+    valueLabel = new Textlabel(controlP5, "0", x + 12, y + h-16);
+    valueLabel.setColorValue(0);
   }
 
   void update() {
     sourceChannel.graphMe = (showGraph.getItem(0).value() == 0);
+    valueLabel.setText("" + sourceChannel.getLatestPoint().value);
   }
 
   void draw() {
@@ -75,5 +80,6 @@ class Monitor {
 
     popMatrix();
     label.draw();
+    valueLabel.draw();
   }
 }

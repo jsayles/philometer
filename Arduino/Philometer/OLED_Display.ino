@@ -43,9 +43,11 @@ void displayStats(float gsr, float body_temp, int brain_signal, int brain_attent
   SeeedOled.setTextXY(3, 1);          
   SeeedOled.putString("Heart: "); 
   SeeedOled.putNumber(heart_interval); 
+  SeeedOled.putString("  "); 
   SeeedOled.setTextXY(4, 2);          
   SeeedOled.putString("BPM: "); 
   SeeedOled.putNumber(heart_bpm); 
+  SeeedOled.putString("  "); 
   SeeedOled.setTextXY(5, 1);          
   SeeedOled.putString("Brain: "); 
   SeeedOled.putNumber(brain_signal);

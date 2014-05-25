@@ -21,7 +21,7 @@ float getGSR() {
 }
 
 int getGSRStatusColor() {
-   if (last_gsr_reading > 0 && last_gsr_reading < 400) {
+   if (last_gsr_reading > 0 && last_gsr_reading < 480) {
       return GREEN;
    }
    return RED;

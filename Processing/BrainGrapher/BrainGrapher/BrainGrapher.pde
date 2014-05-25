@@ -66,16 +66,16 @@ void setup() {
   channels[2] = new Channel("Meditation", color(50), "");
   channels[3] = new Channel("Delta", color(166,206,227), "Dreamless Sleep");
   channels[4] = new Channel("Theta", color(31,120,180), "Drowsy");
-  channels[5] = new Channel("Low Alpha", color(51,160,44), "Relaxed");
-  channels[6] = new Channel("High Alpha", color(251,154,153), "Relaxed");
-  channels[7] = new Channel("Low Beta", color(227,26,28), "Alert");
+  channels[5] = new Channel("Low Alpha", color(178,223,138), "Relaxed");
+  channels[6] = new Channel("High Alpha", color(255,255,153), "Relaxed");
+  channels[7] = new Channel("Low Beta", color(177,89,40), "Alert");
   channels[8] = new Channel("High Beta", color(253,191,111), "Alert");
   channels[9] = new Channel("Low Gamma", color(255,127,0), "Multi-sensory processing");
   channels[10] = new Channel("High Gamma", color(202,178,214), "???");
   channels[11] = new Channel("Heart MS", color(106,61,154), "Heart MS");
-  channels[12] = new Channel("Heart BPM", color(255,255,153), "Beats Per Minute");
-  channels[13] = new Channel("GSR", color(178,223,138), "Galvanic Skin Response");
-  channels[14] = new Channel("Temp", color(177,89,40), "Body Temperature");
+  channels[12] = new Channel("Heart BPM", color(251,154,153), "Beats Per Minute");
+  channels[13] = new Channel("GSR", color(51,160,44), "Galvanic Skin Response");
+  channels[14] = new Channel("Temp", color(227,26,28), "Body Temperature");
 
   // Manual override for a couple of limits.
   channels[0].minValue = 0;
@@ -105,6 +105,8 @@ void setup() {
   String data_file = data_directory + isoDateTime() + ".txt";
   println("Writing raw data to: " + data_file);
   data_output = createWriter(data_file);
+  
+  frame.setTitle("Processing Brain Grapher: " + data_file); 
 }
 
 void draw() {
@@ -159,13 +161,14 @@ void serialEvent(Serial p) {
         //for (int i = 2; i < 14; i++) {
           String stringValue = incomingValues[i].trim();
   
-          int newValue = Integer.parseInt(stringValue);
+          //int newValue = Integer.parseInt(stringValue);
+          int newValue = convertValue(stringValue);
   
           // Zero the EEG power values if we don't have a signal.
           // Can be useful to leave them in for development.
-          //if ((Integer.parseInt(incomingValues[2]) == 200) && (i > 2)) {
-          //  newValue = 0;
-          //}
+          if ((Integer.parseInt(incomingValues[2]) == 200) && (i > 2)) {
+            newValue = 0;
+          }
   
           channels[i - 2].addDataPoint(newValue);
         }
@@ -214,8 +217,8 @@ void stop() {
 
 int convertValue(String str) {
   if (str.contains(".")) {
-    float f = Float.valueOf(str).floatValue();
-    return round(f);
+    //return Integer.parseInt(str.replace(".", ""));
+    return round(Float.valueOf(str).floatValue());
   } else {
     return Integer.parseInt(str);
   }
