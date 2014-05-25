@@ -63,17 +63,28 @@ def main():
 	# Delete the existing layers?
 	
 	# Get the bounds for the Bounding Box
-	width = rs.GetReal(message="Width?", minimum=0, number=7)
-	height = rs.GetReal(message="Height?", minimum=0, number=1.25)
+	width = rs.GetReal(message="Width", minimum=0, number=7)
+	height = rs.GetReal(message="Height", minimum=0, number=1.25)
+	margin_perc = rs.GetReal(message="Margin Percentage", minimum=0.01, number=0.01)
+	gap_perc = rs.GetReal(message="Gap Percentage", minimum=0.01, number=0.08)
+	print "Width: %s, Height: %s" % (width, height)
+	print "Margin: %s%s, Gap: %s%s" % (margin_perc, '%', gap_perc, '%')
+	
+	# Calculate the gap and margin
+	margin_value = width * margin_perc
+	adjusted_width = width - 2 * margin_value
+	gap_value = height * gap_perc
+	adjusted_height = height - gap_value
+	print "Margin Value: %s, Gap Value: %s" % (margin_value, gap_value)
+	print "Adjusted Width: %s, Adjusted Height: %s" % (adjusted_width, adjusted_height)
 	
 	# Add the bounding box
-	base_layer = rs.AddLayer("Base")
-	rs.CurrentLayer(layer=base_layer)
-	rs.AddRectangle(plane, width, height)
+	#base_layer = rs.AddLayer("Base")
+	#rs.CurrentLayer(layer=base_layer)
+	#rs.AddRectangle(plane, width, height)
 
 	# Prompt the user for a data file and load the contents
 	filename = rs.OpenFileName("Open Data File")
-	#filename = "testData.csv"
 	if not filename: return
 	print "Loading %s" % filename
 	file = open(filename, "r")
@@ -94,23 +105,25 @@ def main():
 			print "%s: size=%s, max=%s, min=%s" % (data['title'], len(data_values), data['max'], data['min'])
 			new_layer = rs.AddLayer(data['title'], data['color'])
 			rs.CurrentLayer(layer=new_layer)
-			graph_points = [[width, 0, 0], [0, 0, 0]]
+			graph_points = [[0, 0, 0], [margin_value, gap_value, 0]]
 			for i, v in enumerate(data_values):
-				x = convert_x(i, dataset.size, width)
-				y = convert_y(v, data['max'], data['min'], height)
+				x = margin_value + convert_x(i, dataset.size, adjusted_width)
+				y = gap_value + convert_y(v, data['max'], data['min'], adjusted_height)
 				z = 0
 				point = [x, y, z]
 				graph_points.append(point)
+			graph_points.append([width - margin_value, gap_value, 0])
 			graph_points.append([width, 0, 0])
 			try:
 				new_polyline = rs.AddPolyline(graph_points)
+				rs.MirrorObject(new_polyline, [0, 0, 0], [width, 0, 0], copy=True)
 			except:
 				print "Could not draw: "
 				print graph_points
 			#rs.AddPlanarSrf(new_polyline)
 
 	# Go back to the base layer
-	rs.CurrentLayer(layer=base_layer)
+	#rs.CurrentLayer(layer=base_layer)
 	print "Done!"
 	print
 
