@@ -63,8 +63,8 @@ def main():
 	# Delete the existing layers?
 	
 	# Get the bounds for the Bounding Box
-	width = rs.GetInteger(message="Width?", minimum=0)
-	height = rs.GetInteger(message="Height?", minimum=0)
+	width = rs.GetReal(message="Width?", minimum=0)
+	height = rs.GetReal(message="Height?", minimum=0)
 	#width=30
 	#height=15
 	
