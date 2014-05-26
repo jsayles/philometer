@@ -63,7 +63,7 @@ def main():
 	# Delete the existing layers?
 	
 	# Get the bounds for the Bounding Box
-	width = rs.GetReal(message="Width", minimum=0, number=7)
+	width = rs.GetReal(message="Width", minimum=0, number=6)
 	height = rs.GetReal(message="Height", minimum=0, number=1.25)
 	margin_perc = rs.GetReal(message="Margin Percentage", minimum=0.01, number=0.01)
 	gap_perc = rs.GetReal(message="Gap Percentage", minimum=0.01, number=0.08)
