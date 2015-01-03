@@ -8,7 +8,7 @@
 #define BRAIN_BYPASS A2
 
 // Brightness Controll
-#define BRIGHTNESS_CONTROLL A3
+#define BRIGHTNESS_CONTROL A3
 
 // LCD = IIC = A4, A5
 

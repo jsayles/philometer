@@ -101,7 +101,7 @@ void loop() {
    readGSR();
    readBodyTemp();
    
-   setStatusBrightness(10 + analogRead(BRIGHTNESS_CONTROLL) / 4); 
+   setStatusBrightness(10 + analogRead(BRIGHTNESS_CONTROL) / 4); 
    
    // We go off the base timing of the brain sensors which are ready every
    // aprox 1 second.  We then pull all our data and output the CSV
