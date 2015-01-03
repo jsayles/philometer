@@ -8,6 +8,7 @@ DallasTemperature sensors(&oneWire);
 void setupTemp() {
   sensors.begin();
   sensors.setWaitForConversion(false);
+  sensors.setCheckForConversion(false);
 }
 
 float last_temp_reading = 0;
@@ -17,7 +18,7 @@ float convertTempToF(float temperatureC) {
 }
 
 void readTempSensors() {
-  //sensors.requestTemperatures();
+  sensors.requestTemperatures();
 }
 
 float getBodyTemp() {
