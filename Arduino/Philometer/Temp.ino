@@ -17,10 +17,11 @@ float convertTempToF(float temperatureC) {
 }
 
 void readTempSensors() {
-  sensors.requestTemperatures();
+  //sensors.requestTemperatures();
 }
 
 float getBodyTemp() {
+   //float t = 38;
    float t = sensors.getTempCByIndex(0);
    last_temp_reading = convertTempToF(t);
    return last_temp_reading;

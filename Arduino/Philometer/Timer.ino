@@ -74,3 +74,4 @@ void displayInt(int c) {
    TimeDisp[0] = c/1000%10;;
    tm1637.display(TimeDisp);
 }
+

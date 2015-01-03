@@ -26,3 +26,4 @@ int getGSRStatusColor() {
    }
    return RED;
 }
+
