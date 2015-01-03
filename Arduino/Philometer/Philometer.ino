@@ -99,7 +99,7 @@ void loop() {
    // Read these each loop and we get the average when
    // we call the get methods.
    readGSR();
-   readBodyTemp();
+   readTempSensors();
    
    setStatusBrightness(10 + analogRead(BRIGHTNESS_CONTROL) / 4); 
    

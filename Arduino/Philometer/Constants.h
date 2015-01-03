@@ -1,5 +1,5 @@
 // Temp Body
-#define BODY_TEMP A0
+#define ROOM_TEMP A0
 
 // GSR Sensor
 #define GSR A1
@@ -28,6 +28,9 @@
 // LED CHAIN
 #define LEDS_CLOCK 6
 #define LEDS_DATA 7
+
+// Body Temp
+#define BODY_TEMP 8
 
 // Case Lights
 #define CASE_LIGHTS 10
