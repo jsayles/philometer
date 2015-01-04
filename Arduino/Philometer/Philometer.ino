@@ -217,6 +217,8 @@ String getEEGdata() {
   brain_data.concat(",");
   brain_data.concat(brain.readDelta());
   brain_data.concat(",");
+  brain_data.concat(brain.readTheta());
+  brain_data.concat(",");
   brain_data.concat(brain.readLowAlpha());
   brain_data.concat(",");
   brain_data.concat(brain.readHighAlpha());
