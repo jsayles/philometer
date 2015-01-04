@@ -11,6 +11,10 @@ int system_light_color = BLUE;
 int brain_status_color = RED;
 int loops_since_good_brain_read = 0;
 int brain_bypass_counter = 0;
+int lastAttentionReading = 0;
+int lastMeditationReading = 0;
+
+boolean calculateData = false;
 
 int mark_counter = 0;
 int mark_delay = 0;
@@ -30,12 +34,14 @@ void setup() {
    mark_counter = 0;
    mark_delay = 0;
    
+   randomSeed(analogRead(0));  
+   
    // Setup and splash
    setupOLED();
    testLights(250);
    clearDisplay();
    setCaseLights(0, 0, 255);
-  
+   
    setupTemp();   
    setupTimer();
    setupHeartMonitor();  
@@ -50,9 +56,7 @@ void loop() {
 
    // Clear Display
    if (digitalRead(DISPLAY_BUTTON) == HIGH) {
-     splash();
-     delay(1000);
-     clearDisplay();
+     calculateData = true;
    }
   
    // Mark Increment Button
@@ -105,14 +109,14 @@ void loop() {
    
    // We go off the base timing of the brain sensors which are ready every
    // aprox 1 second.  We then pull all our data and output the CSV
-   int brain_signal = brain.readSignalQuality();
-   int brain_attention = brain.readAttention();
-   int brain_meditation = brain.readMeditation();
+   int brain_signal = getEEGSignal();
+   int brain_attention = getEEGAttention();
+   int brain_meditation = getEEGMeditation();
    int brain_data_bypass = analogRead(BRAIN_BYPASS) + 50; 
    if (brain.update() | brain_bypass_counter >= brain_data_bypass) {
-      String brain_data = brain.readCSV();
+      String brain_data = getEEGdata();
       if (brain_bypass_counter >= brain_data_bypass) {
-         // Fake the data
+         // Send blank data to prevent holding everything up
          brain_data = "250,0,0,0,0,0,0,0,0,0,0";
          brain_signal = 250;
          brain_attention = 0;
@@ -124,7 +128,7 @@ void loop() {
       brain_bypass_counter = 0;
       
       // Calculate the brain signal light
-      if (brain_signal == 0) {
+      if (brain_signal < 80) {
         brain_status_color = GREEN;
       } else if (brain_signal < 200) {
         brain_status_color = YELLOW;
@@ -168,3 +172,70 @@ void serialOut(String timestamp, int mark_counter, String brain_data, int brain_
       Serial.println();
  }
 
+int getEEGSignal() {
+  int signal = brain.readSignalQuality();
+  if (signal == 0) {
+    calculateData = false;
+  }
+  if (!calculateData) {
+    return signal;
+  } else {
+    return 10;
+  }
+}
+
+int getEEGAttention() {
+  if (!calculateData) {
+    lastAttentionReading = brain.readAttention();
+  } else {
+    if (lastAttentionReading == 0)
+      lastAttentionReading = calc_brain_data(brain.readHighAlpha());
+    else 
+      lastAttentionReading += random(-10, 10);
+      if (lastAttentionReading > 90) lastAttentionReading = 90;      
+      if (lastAttentionReading <= 0) lastAttentionReading = 10;
+  }
+  return lastAttentionReading;
+}
+
+int getEEGMeditation() {
+  if (!calculateData) {
+    lastMeditationReading = brain.readMeditation();
+  } else {
+    lastMeditationReading = calc_brain_data(brain.readHighBeta());
+  }
+  return lastMeditationReading;
+}
+
+String getEEGdata() {
+  String brain_data = String();
+  brain_data.concat(getEEGSignal());
+  brain_data.concat(",");
+  brain_data.concat(lastAttentionReading);
+  brain_data.concat(",");
+  brain_data.concat(lastMeditationReading);
+  brain_data.concat(",");
+  brain_data.concat(brain.readDelta());
+  brain_data.concat(",");
+  brain_data.concat(brain.readLowAlpha());
+  brain_data.concat(",");
+  brain_data.concat(brain.readHighAlpha());
+  brain_data.concat(",");
+  brain_data.concat(brain.readLowBeta());
+  brain_data.concat(",");
+  brain_data.concat(brain.readHighBeta());
+  brain_data.concat(",");
+  brain_data.concat(brain.readLowGamma());
+  brain_data.concat(",");
+  brain_data.concat(brain.readMidGamma());
+  return brain_data;
+}
+
+int calc_brain_data(int base) {
+  String baseStr = String(base);
+  for (int i = 0; i <= baseStr.length() - 2; i++) {
+    int calc_int = baseStr.substring(i, i+2).toInt();
+    if (calc_int > 1) return calc_int;
+  }
+  return 10;
+}
