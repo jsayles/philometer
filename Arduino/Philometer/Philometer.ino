@@ -47,8 +47,8 @@ void setup() {
    setupHeartMonitor();  
   
    // Display the header
-   Serial.println();
-   Serial.println("timestamp, mark, brain signal, attention, meditation, delta, theta, low alpha, high alpha, low beta, high beta, low gamma, high gamma, heart MS, heart BPM, GSR, body temp, brain bypass");
+   //Serial.println();
+   //Serial.println("timestamp, mark, brain signal, attention, meditation, delta, theta, low alpha, high alpha, low beta, high beta, low gamma, high gamma, heart MS, heart BPM, GSR, body temp, brain bypass");
 }
 
 void loop() {
