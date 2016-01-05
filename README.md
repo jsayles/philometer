@@ -3,7 +3,10 @@ philometer
 
 For the love of measuring
 
+http://jacobsayles.com/2014/05/01/philometer/
+
 ###Arduino Setup
+''''
 A0 = Room Temp
 A1 = GSR
 A2 = Brain Bypass 
@@ -24,3 +27,4 @@ D10 = Case Lights
 D11 =
 D12 = Counter Display Clock
 D13 = Counter Display Data
+''''
